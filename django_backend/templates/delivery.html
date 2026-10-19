@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}Доставка и оплата{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Доставка и оплата</h2>
+            <p class="text-muted">Всё, что нужно знать о доставке</p>
+        </div>
+
+        <div class="row g-4 mb-5">
+            <div class="col-md-6">
+                <div class="card border-0 rounded-4 p-4" style="background: linear-gradient(135deg, #fff5f5, #fff0e6);">
+                    <h4 class="fw-bold mb-3">🚗 Доставка</h4>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Бесплатная доставка от 1000 ₽</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Стоимость до 1000 ₽ — 200 ₽</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Время доставки: 40-60 минут</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Зона: в пределах города</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Мин. заказ: 500 ₽</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border-0 rounded-4 p-4" style="background: linear-gradient(135deg, #f0f4ff, #e8eeff);">
+                    <h4 class="fw-bold mb-3">💳 Оплата</h4>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i>Наличными курьеру</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i>Картой курьеру (терминал)</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i>Онлайн-оплата картой</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i>Apple Pay / Google Pay</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i>Безнал для юр. лиц</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="fw-bold text-center mb-4">Как сделать заказ?</h3>
+        <div class="row g-4 mb-5">
+            <div class="col-6 col-md-3 text-center">
+                <div class="rounded-circle bg-danger text-white d-inline-flex align-items-center justify-content-center mb-3" style="width:60px;height:60px;font-size:1.5rem;font-weight:bold;">1</div>
+                <div class="fs-2 mb-2">📱</div>
+                <h6 class="fw-bold">Выберите блюда</h6>
+                <small class="text-muted">Добавьте в корзину</small>
+            </div>
+            <div class="col-6 col-md-3 text-center">
+                <div class="rounded-circle bg-danger text-white d-inline-flex align-items-center justify-content-center mb-3" style="width:60px;height:60px;font-size:1.5rem;font-weight:bold;">2</div>
+                <div class="fs-2 mb-2">📝</div>
+                <h6 class="fw-bold">Оформите заказ</h6>
+                <small class="text-muted">Укажите адрес</small>
+            </div>
+            <div class="col-6 col-md-3 text-center">
+                <div class="rounded-circle bg-danger text-white d-inline-flex align-items-center justify-content-center mb-3" style="width:60px;height:60px;font-size:1.5rem;font-weight:bold;">3</div>
+                <div class="fs-2 mb-2">👨‍🍳</div>
+                <h6 class="fw-bold">Готовим</h6>
+                <small class="text-muted">Повар готовит</small>
+            </div>
+            <div class="col-6 col-md-3 text-center">
+                <div class="rounded-circle bg-danger text-white d-inline-flex align-items-center justify-content-center mb-3" style="width:60px;height:60px;font-size:1.5rem;font-weight:bold;">4</div>
+                <div class="fs-2 mb-2">🎉</div>
+                <h6 class="fw-bold">Доставляем</h6>
+                <small class="text-muted">Курьер привезёт</small>
+            </div>
+        </div>
+
+        <div class="rounded-4 p-5 text-white text-center" style="background: #1a1a2e;">
+            <h3 class="fw-bold mb-3">Остались вопросы?</h3>
+            <p class="opacity-75 mb-4">Свяжитесь с нами любым удобным способом</p>
+            <div class="d-flex flex-wrap justify-content-center gap-3">
+                <a href="tel:+79991234567" class="btn btn-outline-light rounded-pill px-4">📞 +7 (999) 123-45-67</a>
+                <a href="mailto:info@rolls-pizza.ru" class="btn btn-outline-light rounded-pill px-4">✉️ info@rolls-pizza.ru</a>
+                <span class="btn btn-outline-light rounded-pill px-4">📍 ул. Центральная, 42</span>
+            </div>
+            <p class="small opacity-50 mt-3 mb-0">Работаем ежедневно с 10:00 до 23:00</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

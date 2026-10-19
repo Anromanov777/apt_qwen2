@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Главная</a></li>
+                <li class="breadcrumb-item"><a href="/menu/">Меню</a></li>
+                <li class="breadcrumb-item"><a href="/menu/{{ product.category.slug }}/">{{ product.category.name }}</a></li>
+                <li class="breadcrumb-item active">{{ product.name }}</li>
+            </ol>
+        </nav>
+
+        <div class="row g-5">
+            <div class="col-md-5">
+                <div class="rounded-4 p-5 text-center" style="background: linear-gradient(135deg, #fff5f5, #fff0e6); min-height: 350px; display: flex; align-items: center; justify-content: center;">
+                    <span style="font-size: 8rem;">{{ product.image|default:"🍣" }}</span>
+                </div>
+            </div>
+            <div class="col-md-7">
+                {% if product.is_popular %}
+                <span class="badge bg-danger mb-2">🔥 Хит продаж</span>
+                {% endif %}
+                <h1 class="fw-bold">{{ product.name }}</h1>
+                <p class="text-muted fs-5">{{ product.description }}</p>
+                
+                {% if product.weight %}
+                <p><i class="bi bi-box-seam me-2"></i>{{ product.weight }}</p>
+                {% endif %}
+                
+                <div class="my-4">
+                    {% if product.old_price %}
+                    <span class="text-muted text-decoration-line-through fs-5 me-2">{{ product.old_price }} ₽</span>
+                    {% endif %}
+                    <span class="text-danger fw-bold" style="font-size: 2.5rem;">{{ product.price }} ₽</span>
+                </div>
+
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <div class="input-group" style="max-width: 140px;">
+                        <button class="btn btn-outline-secondary" id="qty-minus">−</button>
+                        <input type="number" class="form-control text-center" id="qty-input" value="1" min="1" max="20">
+                        <button class="btn btn-outline-secondary" id="qty-plus">+</button>
+                    </div>
+                    <button class="btn btn-primary-custom btn-lg rounded-pill px-5" id="add-to-cart-btn">
+                        <i class="bi bi-cart-plus me-2"></i>В корзину
+                    </button>
+                </div>
+
+                <div class="border-top pt-3">
+                    <p class="small text-muted mb-1"><i class="bi bi-truck me-2"></i>Доставка за 40-60 минут</p>
+                    <p class="small text-muted mb-1"><i class="bi bi-shield-check me-2"></i>Гарантия свежести</p>
+                    <p class="small text-muted"><i class="bi bi-arrow-return-left me-2"></i>Вернём деньги, если не понравится</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Related Products -->
+        {% if related_products %}
+        <hr class="my-5">
+        <h3 class="fw-bold mb-4">Похожие блюда</h3>
+        <div class="row g-4">
+            {% for rp in related_products %}
+            <div class="col-6 col-md-3">
+                <div class="card product-card h-100 shadow-sm">
+                    <div class="product-image">
+                        <span>{{ rp.image|default:"🍕" }}</span>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="fw-bold">{{ rp.name }}</h6>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-danger fw-bold">{{ rp.price }} ₽</span>
+                            <a href="/product/{{ rp.slug }}/" class="btn btn-sm btn-outline-danger rounded-pill">Подробнее</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const qtyInput = document.getElementById('qty-input');
+document.getElementById('qty-minus').addEventListener('click', () => {
+    let val = parseInt(qtyInput.value);
+    if (val > 1) qtyInput.value = val - 1;
+});
+document.getElementById('qty-plus').addEventListener('click', () => {
+    let val = parseInt(qtyInput.value);
+    if (val < 20) qtyInput.value = val + 1;
+});
+
+document.getElementById('add-to-cart-btn').addEventListener('click', function() {
+    const productId = '{{ product.id }}';
+    const quantity = parseInt(qtyInput.value);
+    
+    let cart = JSON.parse(localStorage.getItem('cart') || '{}');
+    
+    if (cart[productId]) {
+        cart[productId].quantity += quantity;
+    } else {
+        cart[productId] = {
+            name: '{{ product.name }}',
+            price: {{ product.price }},
+            quantity: quantity
+        };
+    }
+    
+    localStorage.setItem('cart', JSON.stringify(cart));
+    
+    this.innerHTML = '<i class="bi bi-check-lg me-2"></i>Добавлено!';
+    this.classList.add('btn-success');
+    this.classList.remove('btn-primary-custom');
+    
+    setTimeout(() => {
+        this.innerHTML = '<i class="bi bi-cart-plus me-2"></i>В корзину';
+        this.classList.remove('btn-success');
+        this.classList.add('btn-primary-custom');
+    }, 2000);
+    
+    // Update badge
+    const totalItems = Object.values(cart).reduce((sum, item) => sum + item.quantity, 0);
+    const badge = document.getElementById('cart-count');
+    badge.textContent = totalItems;
+    badge.style.display = 'flex';
+});
+</script>
+{% endblock %}
