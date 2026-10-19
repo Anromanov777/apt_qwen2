@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block title %}О нас{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">О нашем кафе</h2>
+            <p class="text-muted">Мы — команда профессиональных поваров, которые любят своё дело</p>
+        </div>
+
+        <div class="row align-items-center mb-5">
+            <div class="col-md-5 text-center">
+                <div class="bg-light rounded-4 p-5">
+                    <span style="font-size: 6rem;">👨‍🍳</span>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <h3 class="fw-bold mb-3">Наша история</h3>
+                <p class="text-muted">
+                    Кафе «Роллы & Пицца» было основано в 2020 году с простой миссией — 
+                    доставлять вкусную и свежую еду прямо к вашему порогу.
+                </p>
+                <p class="text-muted">
+                    Мы используем только свежие ингредиенты от проверенных поставщиков. 
+                    Наши суши-мастера прошли обучение в Японии, а повара пиццы — в Италии.
+                </p>
+                <p class="text-muted">
+                    За 5 лет работы мы обслужили более 50 000 довольных клиентов.
+                </p>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-5">
+            <div class="col-md-3 col-6">
+                <div class="card border-0 shadow-sm rounded-4 text-center p-4">
+                    <span class="fs-1">🥬</span>
+                    <h5 class="fw-bold mt-2">Свежие продукты</h5>
+                    <small class="text-muted">Ежедневные поставки</small>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="card border-0 shadow-sm rounded-4 text-center p-4">
+                    <span class="fs-1">⚡</span>
+                    <h5 class="fw-bold mt-2">Быстрая доставка</h5>
+                    <small class="text-muted">40-60 минут</small>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="card border-0 shadow-sm rounded-4 text-center p-4">
+                    <span class="fs-1">💰</span>
+                    <h5 class="fw-bold mt-2">Честные цены</h5>
+                    <small class="text-muted">Лучшее соотношение</small>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="card border-0 shadow-sm rounded-4 text-center p-4">
+                    <span class="fs-1">❤️</span>
+                    <h5 class="fw-bold mt-2">С любовью</h5>
+                    <small class="text-muted">Как для себя</small>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="fw-bold text-center mb-4">Отзывы клиентов</h3>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card border-0 bg-light rounded-4 p-4">
+                    <div class="text-warning mb-2">⭐⭐⭐⭐⭐</div>
+                    <p class="fst-italic text-muted">"Лучшие роллы в городе! Филадельфия просто тает во рту."</p>
+                    <strong>— Анна К.</strong>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 bg-light rounded-4 p-4">
+                    <div class="text-warning mb-2">⭐⭐⭐⭐⭐</div>
+                    <p class="fst-italic text-muted">"Заказываю пиццу каждую пятницу. Всегда горячая и вкусная!"</p>
+                    <strong>— Дмитрий П.</strong>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 bg-light rounded-4 p-4">
+                    <div class="text-warning mb-2">⭐⭐⭐⭐</div>
+                    <p class="fst-italic text-muted">"Отличный сервис и приятные курьеры. Рекомендую!"</p>
+                    <strong>— Мария С.</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

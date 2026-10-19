@@ -1,0 +1,232 @@
+{% extends 'base.html' %}
+
+{% block title %}Оформление заказа{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <h2 class="fw-bold mb-4">📝 Оформление заказа</h2>
+        
+        <div class="row">
+            <div class="col-lg-8">
+                <form id="checkout-form" class="card shadow-sm rounded-4 p-4">
+                    <h5 class="fw-bold mb-3">Контактные данные</h5>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Ваше имя *</label>
+                        <input type="text" class="form-control" id="name" required placeholder="Иван Иванов">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Телефон *</label>
+                        <input type="tel" class="form-control" id="phone" required placeholder="+7 (999) 123-45-67">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" placeholder="email@example.com">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Адрес доставки *</label>
+                        <textarea class="form-control" id="address" rows="2" required placeholder="ул. Примерная, д. 1, кв. 1"></textarea>
+                    </div>
+                    
+                    <h5 class="fw-bold mb-3 mt-4">Способ оплаты</h5>
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <label class="btn btn-outline-secondary w-100 p-3 text-start">
+                                <input type="radio" name="payment" value="cash" checked class="me-2">
+                                💵 Наличные
+                            </label>
+                        </div>
+                        <div class="col-6">
+                            <label class="btn btn-outline-secondary w-100 p-3 text-start">
+                                <input type="radio" name="payment" value="card" class="me-2">
+                                💳 Карта
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Промокод</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="promo-code" placeholder="Введите промокод">
+                            <button type="button" class="btn btn-outline-danger" id="apply-promo">Применить</button>
+                        </div>
+                        <div id="promo-message" class="small mt-1"></div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Комментарий к заказу</label>
+                        <textarea class="form-control" id="comment" rows="2" placeholder="Пожелания..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary-custom btn-lg w-100 rounded-pill mt-3" id="submit-btn">
+                        <span class="loading-spinner" id="spinner">
+                            <span class="spinner-border spinner-border-sm me-2"></span>
+                        </span>
+                        Подтвердить заказ
+                    </button>
+                </form>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="card shadow-sm rounded-4 p-4">
+                    <h5 class="fw-bold mb-3">Ваш заказ</h5>
+                    <div id="order-items"></div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>Подытог:</span>
+                        <span id="order-subtotal">0 ₽</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>Доставка:</span>
+                        <span id="order-delivery">0 ₽</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-1" id="discount-row" style="display:none !important;">
+                        <span class="text-success">Скидка:</span>
+                        <span class="text-success" id="order-discount">0 ₽</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between">
+                        <span class="fw-bold fs-5">Итого:</span>
+                        <span class="fw-bold fs-5 text-danger" id="order-total">0 ₽</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4">
+            <div class="modal-body text-center p-5">
+                <span class="fs-1">✅</span>
+                <h3 class="fw-bold mt-3">Заказ оформлен!</h3>
+                <p class="text-muted">Мы свяжемся с вами для подтверждения.<br>Ожидайте доставку в течение 60 минут.</p>
+                <a href="/" class="btn btn-primary-custom btn-lg rounded-pill">На главную</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let discountPercent = 0;
+
+function renderOrderSummary() {
+    const cart = JSON.parse(localStorage.getItem('cart') || '{}');
+    const items = Object.entries(cart);
+    const orderItemsEl = document.getElementById('order-items');
+    
+    let html = '';
+    let subtotal = 0;
+    
+    items.forEach(([id, item]) => {
+        const itemTotal = item.price * item.quantity;
+        subtotal += itemTotal;
+        html += `<div class="d-flex justify-content-between small mb-1"><span>${item.name} ×${item.quantity}</span><span>${itemTotal} ₽</span></div>`;
+    });
+    
+    orderItemsEl.innerHTML = html;
+    
+    const deliveryCost = subtotal >= 1000 ? 0 : 200;
+    const discount = Math.round(subtotal * discountPercent / 100);
+    const total = subtotal + deliveryCost - discount;
+    
+    document.getElementById('order-subtotal').textContent = subtotal + ' ₽';
+    document.getElementById('order-delivery').textContent = deliveryCost === 0 ? 'Бесплатно' : deliveryCost + ' ₽';
+    document.getElementById('order-total').textContent = total + ' ₽';
+    
+    if (discount > 0) {
+        document.getElementById('discount-row').style.display = 'flex';
+        document.getElementById('order-discount').textContent = '-' + discount + ' ₽';
+    }
+}
+
+// AJAX: Применение промокода
+document.getElementById('apply-promo').addEventListener('click', function() {
+    const code = document.getElementById('promo-code').value.trim();
+    const messageEl = document.getElementById('promo-message');
+    
+    if (!code) return;
+    
+    // Имитация AJAX запроса к API
+    // В реальном приложении: fetch('/api/promo/validate/', {method: 'POST', body: JSON.stringify({code})})
+    
+    // Симуляция проверки промокода
+    const validCodes = {
+        'WELCOME20': 20,
+        'SUMMER30': 30,
+        'FREEDelivery': 10,
+    };
+    
+    setTimeout(() => {
+        if (validCodes[code.toUpperCase()]) {
+            discountPercent = validCodes[code.toUpperCase()];
+            messageEl.innerHTML = `<span class="text-success">✅ Промокод применён! Скидка ${discountPercent}%</span>`;
+            renderOrderSummary();
+        } else {
+            discountPercent = 0;
+            messageEl.innerHTML = '<span class="text-danger">❌ Промокод недействителен</span>';
+            renderOrderSummary();
+        }
+    }, 500);
+});
+
+// AJAX: Отправка заказа
+document.getElementById('checkout-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const cart = JSON.parse(localStorage.getItem('cart') || '{}');
+    if (Object.keys(cart).length === 0) {
+        alert('Корзина пуста!');
+        return;
+    }
+    
+    const submitBtn = document.getElementById('submit-btn');
+    const spinner = document.getElementById('spinner');
+    submitBtn.disabled = true;
+    spinner.classList.add('active');
+    
+    const orderData = {
+        name: document.getElementById('name').value,
+        phone: document.getElementById('phone').value,
+        email: document.getElementById('email').value,
+        address: document.getElementById('address').value,
+        payment_method: document.querySelector('input[name="payment"]:checked').value,
+        comment: document.getElementById('comment').value,
+        promo_code: document.getElementById('promo-code').value,
+        items: Object.entries(cart).map(([id, item]) => ({
+            product_id: parseInt(id),
+            quantity: item.quantity
+        }))
+    };
+    
+    // AJAX запрос к API (имитация)
+    // В реальном приложении:
+    // fetch('/api/orders/', {
+    //     method: 'POST',
+    //     headers: {'Content-Type': 'application/json', 'X-CSRFToken': csrfToken},
+    //     body: JSON.stringify(orderData)
+    // })
+    
+    console.log('Отправка заказа:', orderData);
+    
+    setTimeout(() => {
+        submitBtn.disabled = false;
+        spinner.classList.remove('active');
+        localStorage.removeItem('cart');
+        
+        const modal = new bootstrap.Modal(document.getElementById('successModal'));
+        modal.show();
+    }, 1500);
+});
+
+renderOrderSummary();
+</script>
+{% endblock %}
